@@ -13,12 +13,15 @@ import sys
 from math import floor
 from pygame import mixer  # Load the popular external library
 
+mixer.init()
+mixer.music.load('alarm01.wav')
 
 class WindowThread(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         QtWidgets.QMainWindow.__init__(self,parent)
         #os.chdir("Y:\Experimental Control\Python Experimental Control")
         uic.loadUi('design.ui', self)
+        
         self.init = 0        
         self.elapsedWorkSeconds = 0
         self.elapsedWorkMinutes = 0
@@ -37,10 +40,13 @@ class WindowThread(QtWidgets.QMainWindow):
         self.doBreak.clicked.connect(self.startBreak)
         self.reset.clicked.connect(self.resetTimes)
         self.pause.clicked.connect(self.timer.stop)
+        #self.reset.clicked.connect(mixer.music.play)
         
         self.timer.timeout.connect(self.updateDisplay)
         
     def startBreak(self):
+        if(not(self.timer.isActive())):
+            self.timer.start()
         self.working = False
         self.displayedWorkMinutes += self.elapsedWorkMinutes
         if (self.elapsedWorkMinutes >= self.breakMinutesThreshold.value()):
@@ -85,6 +91,9 @@ class WindowThread(QtWidgets.QMainWindow):
             if (self.elapsedWorkMinutes >= self.breakMinutesThreshold.value()):
                 self.displayTime(self.breakMinutes, self.breakSeconds, self.displayedBreakMinutes+self.earnedBreakMinutes, self.displayedBreakSeconds)
         else:
+            if(self.displayedBreakMinutes==0 and self.displayedBreakSeconds==0):
+                    for i in range(3):
+                        mixer.music.play()
             if(self.displayedBreakMinutes >= 1):
                 if (self.displayedBreakSeconds <= 0):
                     self.displayedBreakSeconds = 59
