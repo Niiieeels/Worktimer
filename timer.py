@@ -92,8 +92,8 @@ class WindowThread(QtWidgets.QMainWindow):
                 self.displayTime(self.breakMinutes, self.breakSeconds, self.displayedBreakMinutes+self.earnedBreakMinutes, self.displayedBreakSeconds)
         else:
             if(self.displayedBreakMinutes==0 and self.displayedBreakSeconds==0):
-                    for i in range(3):
-                        mixer.music.play()
+                mixer.music.play(3)
+                        
             if(self.displayedBreakMinutes >= 1):
                 if (self.displayedBreakSeconds <= 0):
                     self.displayedBreakSeconds = 59
